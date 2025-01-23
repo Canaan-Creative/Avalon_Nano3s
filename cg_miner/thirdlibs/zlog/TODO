@@ -1,0 +1,17 @@
+[p] 使用valgrind测试性能
+[ ] 更好的错误展现,当系统出问题的时候直接报错
+[ ] hzlog的可定制
+[ ] hex那段重写,内置到buf内,参考od的设计
+[ ] 分类匹配的可定制化, rcat
+[ ] 自行管理文件缓存，替代stdio
+[ ] 减少dynamic文件名open的次数，通过日期改变智能推断, file_table?
+[ ] async file输出的增加
+[ ] 兼容性问题 zlog.h内
+[ ] 增加trace级别
+[ ] gettid()
+[ ] 性能对比, log4x, pantheios, glog
+[ ] perl, python, go, c++支持
+[ ] redis对接,协议设计
+[ ] 和rsyslog对接的问题
+[x] linux fsync->fdatasync, open..
+

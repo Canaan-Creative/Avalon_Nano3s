@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avalon Device</title>
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@100..900&display=swap" rel="stylesheet"
+        rel="preload" as="style">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f8;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .login-container {
+            background-color: white;
+            width: 460px;
+            padding: 40px 50px;
+            border-radius: 30px;
+            text-align: center;
+        }
+
+        .login-container .login-logo {
+            width: 100px;
+            height: 100px;
+            margin: 60px auto 40px;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGMAAABiCAMAAABzuZ0CAAAAAXNSR0IB2cksfwAAAuhQTFRFAAAACAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQECAQEYX1XFgAAAPh0Uk5TAAMIeagC4foQa/931+5NhAG84i9Prs0j9T6Utw3jJXas2vgaS4jH7zj7ctsA9DmSE+n8sQnDmfkgWv5EHpgEycar8EBSMG+9zoHfTBTzW54GhsEbP5FuvuUS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");
+        }
+
+        .qrcode-wrapper {
+            width: 100%;
+            text-align: center;
+        }
+
+        .qrcode-wrapper #qrcode {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 40px;
+            background-color: #f3f4f8;
+            border-radius: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .qrcode-wrapper .qrcode-tip {
+            color: #060000;
+        }
+
+        .login-container .or-text {
+            margin: 50px 0 36px;
+            color: #060000;
+        }
+
+        .login-container a {
+            color: #418cff;
+            text-decoration: none;
+        }
+
+        .login-container a:hover {
+            text-decoration: underline;
+        }
+
+        .copyright {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #060000;
+        }
+    </style>
+    <script src="./qrcode.min.js"></script>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-logo"></div>
+        <div class="qrcode-wrapper">
+            <div id="qrcode"></div>
+            <div class="qrcode-tip">Scan the QR Code with Your Avalon Family APP</div>
+        </div>
+        <form name="loginform" action="/" method="get" style="display: none;"></form>
+        <form name="dashform" action="dashboard.cgi" method="post" style="display: none;"></form>
+    </div>
+    <div class="copyright">Copyright © canaan.io, All Rights Reserved.</div>
+</body>
+
+<script>
+    function AJAX(url, callback) {
+        var req = AJAX_init();
+        req.onreadystatechange = AJAX_processRequest;
+        function AJAX_init() {
+            if (window.XMLHttpRequest) {
+                return new XMLHttpRequest();
+            } else {
+                if (window.ActiveXObject) {
+                    return new ActiveXObject("Microsoft.XMLHTTP");
+                }
+            }
+        }
+        function AJAX_processRequest() {
+            if (req.readyState == 4) {
+                if (req.status == 200) {
+                    if (callback) {
+                        callback(req.responseText);
+                    }
+                }
+            }
+        }
+        this.doGet = function () {
+            req.open("GET", url, true);
+            req.send(null);
+        };
+        this.doPost = function (body) {
+            req.open("POST", url, true);
+            req.setRequestHeader(
+                "Content-Type",
+                "application/x-www-form-urlencoded"
+            );
+            req.setRequestHeader("ISAJAX", "yes");
+            req.send(body);
+        };
+    }
+
+    function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+
+    function clearCookie(name) {
+		// 设置 Cookie 的过期时间为过去的日期即可清除
+		document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+	}
+
+    let getAuthTimer = null;
+    function getAuthCallback(req) {
+        if (req && req.auth) {
+            if (getAuthTimer) {
+                clearInterval(getAuthTimer);
+            }
+            try {
+                let plaintext = JSON.stringify(req);
+                renderQrcode(plaintext);
+            } catch (e) {
+                console.log("err:" + e.message)
+            }
+        }
+    }
+
+    function getCookieCallback(req) {
+        if (req && req.auth && req.code) {
+            setCookie("auth", req.auth + req.code, 1);
+            dashform.submit();
+        }
+    }
+
+    function getAuth() {
+        let oUpdate;
+        oUpdate = new AJAX("get_auth.cgi?num=" + Math.random(),
+            function (t) {
+                try {
+                    eval(t)
+                } catch (e) {
+                    console.log("get auth err:" + e.message)
+                }
+            });
+        oUpdate.doGet();
+    }
+
+    function renderQrcode(plaintext) {
+        let qrcode = new QRCode(document.getElementById("qrcode"), {
+            text: plaintext,
+            width: 120,
+            height: 120,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    }
+
+    function checkLogin() {
+        let oUpdate;
+        oUpdate = new AJAX("is_login.cgi?num=" + Math.random(),
+            function (t) {
+                try {
+                    eval(t)
+                } catch (e) {
+                    console.log("check login err:" + e.message)
+                }
+            });
+        oUpdate.doGet();
+    }
+
+    function passwdLogin() {
+        loginform.submit();
+    }
+
+    setTimeout(() => {
+        getAuth()
+        getAuthTimer = setInterval(function () { getAuth() }, 5000);
+    }, 800);
+
+    setInterval(function () { checkLogin() }, 5000);
+    clearCookie("auth");
+</script>
+
+</html>

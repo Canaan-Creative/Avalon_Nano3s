@@ -1,0 +1,6 @@
+.vscode
+cg_miner/build
+cg_miner/boardconf.h
+toolchain
+output
+

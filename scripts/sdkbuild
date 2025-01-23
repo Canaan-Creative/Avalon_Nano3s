@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+set -e
+
+SRC_DIR=$(cd `dirname $0`/..; pwd)
+BUILD_DIR="${SRC_DIR}/output"
+
+[ ! -d ${BUILD_DIR} ] && exit 1
+PRODUCT=$1
+COMPILE_VER=$2
+COMMIT=$3
+
+gen_kdimage()
+{
+	local genimage="${BUILD_DIR}/tools/genimage "
+	local cfgfile="${BUILD_DIR}/tools/gen_image_cfg/genimage-spinand.cfg"
+	local image_name="$1";
+	local targetname="Avalon_${PRODUCT}_$(date "+%Y%m%d")${COMPILE_VER}_${COMMIT}"
+
+	mkdir -p "${BUILD_DIR}/"; cd "${BUILD_DIR}/";
+	rm -f  *.kdimg *.kdimg.gz;
+	GENIMAGE_TMP="../genimage.tmp" ; rm -rf "${GENIMAGE_TMP}";
+	${genimage}   	--rootpath "$(pwd)"  --tmppath "${GENIMAGE_TMP}"    \
+					--inputpath "$(pwd)"  	--outputpath "$(pwd)"	--config "${cfgfile}"
+
+	rm -rf "${GENIMAGE_TMP}"
+	mv ${image_name} ${targetname}.kdimg
+	gzip -k -f ${targetname}.kdimg
+	chmod a+rw ${targetname}.kdimg ${targetname}.kdimg.gz;
+}
+
+gen_image_upgrade()
+{
+	cd  "${BUILD_DIR}/";
+	rm -f  Avalon_*.img.gz;
+
+    local cfgpath="${BUILD_DIR}/tools/gen_image_cfg"
+
+    local cfgfile="${cfgpath}/packagefile_USB.cfg"
+    if [ -e $cfgfile ]; then
+        ${BUILD_DIR}/tools/gen_upgrade -f ${cfgpath}/packagefile_USB.cfg -t $PRODUCT -v $COMPILE_VER -m $COMMIT
+    fi
+	rm -fr usb_up.aup *.vfat;
+	rm -fr app sysimages tools app.* *.kdimg;
+}
+
+gen_kdimage sysimage-spinand256m.kdimg
+gen_image_upgrade

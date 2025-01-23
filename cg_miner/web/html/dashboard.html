@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avalon Device Dashboard</title>
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@100..900&display=swap" rel="stylesheet"
+        rel="preload" as="style">
+    <style>
+        body {
+            background-color: #f3f4f8;
+            margin: 0;
+            padding: 0;
+            font-family: "Noto Sans Gujarati";
+            font-optical-sizing: auto;
+            font-weight: 400;
+            font-style: normal;
+            font-variation-settings:
+                "wdth" 100;
+        }
+
+        .container {
+            width: calc(100vw - 16%);
+            margin: 0 auto;
+        }
+
+        .header {
+            height: 72px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 0 30px;
+            box-sizing: border-box;
+            color: #060000;
+            background-color: #fff;
+            border-radius: 50px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-logo {
+            width: 40px;
+            height: 40px;
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAlCAMAAAD7q3BLAAAAAXNSR0IB2cksfwAAAbBQTFRFAAAABgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABBgABaE1nmAAAAJB0Uk5TAAy0b/85A9+rVf0hx5E69BCsduQGklzP92BCBZDAtRkpuJtE+h4xFraYsIArKv7qCJynZRf4JPzWAYIoGKBKCetT9dwcvOKXLtexLKFLyzejjxpN8RSFL2l3bSOD7guirh0T72vhlHgCh9kwWz7nUTizzqnecMRsX9piNdBA1FC7pZNSlowfxRuONsjyiloE+Gc88gAAAl5JREFUeJx90n9IU1EUB/DvyVyzhXO6VpTVIqal5ahJpFnLKIsgMkEikhT/iEZ/FEHMitEPGQ3BLCIRKipRjChBKgy1RlEEkVRWWlmipYVlZcnCWvk6920zN/d2/7i/zuee9857lxDciEZCd0LWUUTeiEJFfycORxQxXkaeSGIKJ4gZiiBif3KnoUFloZOPx35VFBrptxi0NKAkpn7zjfGfFESc5K8ioV9BxP8A9PSZZ4YPYcXM4e/A9N5ZH4EZ78IKA5egn9QjV5zYHU5M+8Ll8jPmvgdmd4UR83oAI3UCSRzVa1+NF/PfAKYOMUt5DSS/GCcWvvSnABZRO1LpSahY/CyQAljSBphbQ0Q6PQ6kAJZSK288CBaZD+UUy+meWK3gaObdIGHliOW5J5uIWnhpkrqR3RwkLE+BjD/EiVYPcod1t4A1N8eIjLhmWHQTmsRcu+wGMOfXANZfHyM2NgIbiHxbWWo+vPkajGn1/8Vat3hSe07fI7HK9TYgv8mDvMujYstV39ukLqB+UUGuimoLLmErVQdEYa2/5oKRKKlGfnOTii6i6Kxf5LV1+z6rWeysTD4vFsV0DlZTlU/YzshgB50WQ1JOlRhSrFSJXSdlsV2qE1vbqiXu99CptFVEJwC1rQJ7y2RhL+eIxubiPjqRbw/yjVTPV8GccBt2J4udnXeAEvd9wHHBlDVUUzS5JV33ltM66Ch2l7MoPQIcvsK3oTi2cfRiobRXbTjENW06QDjmKOxyI0xzdfBHcNopWlJLnnCAWxntd+0jtfN4nwLgP2qpO0iuEsW4aBWV/wAMfKnakr+KLgAAAABJRU5ErkJggg==");
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .header-name {
+            margin-left: 30px;
+            height: 40px;
+            line-height: 44px;
+        }
+
+        .header-separator {
+            border: 1px solid #a0a0a0;
+            height: 20px;
+            margin: 0 30px;
+        }
+
+        .header-status {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: #26e68e;
+        }
+
+        .header-status-text {
+            margin-left: 10px;
+            height: 40px;
+            line-height: 44px;
+        }
+
+        .header .header-right {
+            display: flex;
+            align-items: center;
+            color: #060000;
+        }
+
+        .header-load-icon {
+            width: 66px;
+            height: 52px;
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAAA0CAMAAAAJ8R4GAAAAAXNSR0IB2cksfwAAATtQTFRF8/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48PL4r8r83uf58/T41+P5gq/+cKT/0d/6ssz72+X51uL6iLL+h7L+p8b8z976utH7l7z96u/4faz+dqf/cqX/f63+7vH47PD4m779zd365ez5uND7gK7+ocL8xdj6fKv+2OT5krn9jLX9ga/+4ur5caT/ibP+w9f7v9T74en5irT+t8/7hrH+ncD9udH75Ov56O35g7D+d6j/rMn85+357/H41eL6lbv9n8H8wNX7jbb98/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T4gmel9gAAAGl0Uk5TAAY/gK7U7fn/MZnuL7X+tgiO+48kzzXq7DfzjS60nAfwPq/////V//////////////////////////////////////////////////////////////////////////EyM7kwCdD0JSb6+0WfXAAAAklJREFUeJytl81r1EAYxt/HuLvustumH2o1sKWVVSoiqCcPflARD/VQKhUFi1/g/+RBrPQgguAH4kEEKSJ40ouiyHYtrdstZWmjFld3u44zbqpJm0ySmX0OISHv/JJM3nned0AewRH5iznyjnFfpLG2JWCwWwZjNX9EFqhHAAgl0VzdjDCBHxEBQhk07Q2IXnyPARDKsaoHsQNfYxLEe1dciF1Yjk0g6maVf4heI/47CHU2qw7CTMSdh3XlGnYL0VULjQ1ST/kvIpuM8ze9ymS+CESuoUwg2j7PEelE1Jz0U7JRA+WXNAg8o+bQj0UtRB/DQEWLINLSSGgiGhhcCAmxgHnZ/d3YOycn9HMPK8kC8uizZfdpz2/uUkVZhIlUkE8KFSDSLgl8CI5h2CZ7wv711ZPBu8AgOYKGtnKPzOEbdeKtIoIOczPq4TO6tPO1KoLoKPCKrIHyZwXEkDOHh0h8w7GXCojjy+4pPDGtgDiJF/w4PCtNLDniVKm76zmdLhaeKSPozCfah7UiWR1PVREjeN86OTCTCswKjpAluHWk6rjJwUeBQSxkmY3CnuW/9afkS8zQxX7uTUfhviwgH2o54x9tqeNwy2mD8Wnbb127CJyfbkcposv3tBAXJnliXb2rQbh4W1T2aw81moP6qm6Lkl5pdTnXH6s2SpfYrba1a7w6n51SIEw8+d80cgaT10U/eVtXohsPYjfQYzfJgyDTYJptPFfW+BWZkPLbTAhF3tKM33FdbnBOsakaLE9MBgy+MmWVNm2s/gByJJy67arFzwAAAABJRU5ErkJggg==");
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+        }
+
+        .header-load-icon:hover {
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAAA0CAMAAAAJ8R4GAAAAAXNSR0IB2cksfwAAAUpQTFRFcKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/c6b/u9P/h7P/cKT/jrf/6/L/////lrz/t9H/irX/kLj/5e//5u//w9n/l73/rsz/1OT/eqr/mL3/8fb/+fv//f7/7vT/dqj/eKn/0OH/mb7/f67/sM3/yd3/osT/8vf/jbf/2ef/daf/4Ov/7PP/g7D//v//5O7/pcb/lbz/qcj/hLH/4u3/ss7/5/D/zuD/r8z/4+3/2uf/gK7/fKv/6vL/9/r/vdX/faz/dKf/kbn/1+X/y97/qMf/3+v/8Pb/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/cKT/sMq/OgAAAG50Uk5TAAY/gK7U7fn/MZnuL7X+tgiO+48kzzXq7DfzjS60nAfwPq/////V////////////////////////////////////////////////////////////////////////////////8TIzuTAJ0PQlJvrDO2itAAACSElEQVR4nK2X3UsUURjG36dhV3fZzdG1UhdWNCqLhCgivMgMiegqgkAqCpIywX/Hi8jwIrqIQgSvIiTCJYguBKnoAzHQtpVwdSNpa7fteE675ozOnJk5Z5+L+WDe85uv9zzve0A2oSpyFqvKPsZ6EsGfXS6DrTIYKzgjYkDRB0AojPL6ToQJ/PQJEIqinN+GaMaPAAChOFuxIfbie0CCeO6sBdGK1cAEoiaW/Y9oNoI/g1BDeaWKMENBv8Om4qV8BdFY8Ix1UyLzDxELB/mbdkWjXwQiXlImEO1Z4ohIyG9OOilcKoBS3zQIPKMW0Y5lLUQLQ0dWiyDS0ghpIkro/OoRkgSWZNfbcHBRTmjnHrYgC0ihJS+7Tvv/cpeal0WYqHPzSaEDEGkXBt67xzDUy+5wZHP2RPHWNUiOoG5hZru5H5mYVUTQCeS4KaKY3/dKFUHUA7ykZEfmswKi+01lf5rSfNs7o4A4k7N+wr4XCoizeM63/Zh2jfBEnJtPND2j858OPVVG0IUPdBh4R0cxpYq4iLnKwbGPibQEIUvw5Knlqpscn3ANYh7T7DJyPB9O/pK8iek52QdeN3Q9kgWkPC3nCtJSx+GWUwPj07bfonYRuDZdi1JEtx5qIa6P8cQaeqBBuHFPVPY7TzSag+K6bosSWat0OcMTqo3STXa3Zu0ar86XxhUIg5NbTSNnMHlddJK9dSUaeRy4gR4YJRuCTINptvFcMeO3b0Kd02JCyPeS5up9y+k25xSLqs7M4JjL4NvjyYUdC6sNAc+aui2vyV4AAAAASUVORK5CYII=");
+        }
+
+        .header-load-text {
+            margin-left: 20px;
+        }
+
+        .header-load-time {
+            margin-left: 25px;
+        }
+
+        .header-logout {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .header-logout-icon {
+            margin: 0 20px 0 70px;
+            width: 55px;
+            height: 55px;
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADcAAAA3CAMAAACfBSJ0AAAAAXNSR0IB2cksfwAAAWVQTFRF8/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T47/H1ys/bu8HQucDOucDP09fhyc7a8/T46evxqLHCoaq9usDP8/T4s7rKv8XT3+Lq4eTrxszY0tbg8/T4pa3AxcvX8/T48/T4qrLE8/T48/T4qbHD7vD15unv5+nv5+rwwMbT0dXfw8nW8/T4v8XSwsjVys/asbnJwcfUtbzL8PL2tr3M2t7mxMrWxcrXsLjIqrLDy9DbqLDCt77N8/T4pK2/4OPquL7N8/T4sLfIsbjIztLduL/NzdLdpq7A8/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T48/T4xotZtAAAAHd0Uk5TABNShqzS6vz/1LKJGnXM/XY2sCm4twj5hyhG8fJaW/5FJAfN+rkb/////////xj/////VP///////1P//4qt/7TT///////////l/////////////////////xn////O////////sSVHSFxJ84z7Mbo4N3fm1bU27yloAAACvklEQVR4nKWWz08TURDHZyj9IaC0tqEWWpGfWoNiQBMM0QQ0etADMSaN0ejFKIkH4z9i4gEVbh6UVBORixqNiYlGgtF4wgRBTUAKmJYWYy1F6XN3225235vttuV76evsfHbe2zdv3iAQwpwYsyCmGKNcBEuNBKS1Bjur+PfbjHNhUnwVsGoWL8S5UXhxXlszMSOuLuZZNcIAajHzk+R8UYsxJWvDs0hw9RijnLXyZCICF1gvMMe8am3zHLcTl80xAC+b03G7UkVEUyJaIhquad10bXm5bd9VrhkXisUAGti3PLcjUTwG4FzKcb5MkYvLyp9czHIew+SiFZhROFeqNAxgS1zmtv8platakbj25bS5p1527xcE51qpGIAjgdAi7F2jXCOAVcxKeWSdobiGr7h/lU/M3ZhNIvwM0GL7O0tN9Bd2T/HGjo1KhVybBjiQBscnAuxCi5W3Bas+quODSSDBQ3j0vcBtm1THbZVAgj3YNyFwrncAvcpUEZWS4n3N+yDaKkiub0lrEiL2Y+sPkjsW0dn4iB50CHNXuOPcrvpfchM1iMdzgRdcPIP1nZzT2Rrxme5/v9H33Ku7hJqecj5I7Z/MncLsYyU9G5/zPj1UvrSPq+OBaSqanC9ifgb3jKljOc+CjwVMys/zb/nzcHaq45GG2/dQxKTzAJfCnLHVCp0r8l34QN6OrvsiBqF71Hm/gB/kn/pXUtrUjRKYct7LrS9l1LOLI5upn9A2b+qpU65eg69ayO1C8sdjm7uPoPkIv4cFFHqj3n8l3benh0HlYHCs2Pv9zB3QcOX2E0X2L/4Tt4Hj4Np41Ay7zIbyQ21/lqAaVI3QSfVnUj8YwhFj6goL0/2gpOt41wgbZLd0sbnHN5Jh4ljZQzU39Raiv776JKrvrwc8w6b9ddZ4eLLX0j0ac59DHOqcoD7Xf33aw45XLcVHAAAAAElFTkSuQmCC");
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .header-logout-text {
+            color: #a0a0a0;
+        }
+
+        .dashboard-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 34px 0;
+            box-sizing: border-box;
+            color: #060000;
+        }
+
+        .dashboard-title-left {
+            display: flex;
+            align-items: center;
+            margin-left: 60px;
+            font-size: 20px;
+        }
+
+        .dashboard-title-right {
+            display: flex;
+        }
+
+        .elapsed-time {
+            margin-left: 80px;
+        }
+
+        .elapsed-time {
+            display: flex;
+            align-items: center;
+        }
+
+        .elapsed-time .elapsed-cell {
+            display: flex;
+            align-items: center;
+            margin-right: 30px;
+            color: #a0a0a0;
+        }
+
+        .elapsed-time .elapsed-cell div {
+            font-family: "Noto Sans Gujarati";
+            font-optical-sizing: auto;
+            font-weight: 500;
+            font-style: normal;
+            font-variation-settings: "wdth" 100;
+            margin-right: 15px;
+            color: #060000;
+        }
+
+        .dashboard {
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #ecedef;
+            border-radius: 34px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .dashboard-left {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: calc(75% - 30px);
+            margin-right: 30px;
+        }
+
+        .card {
+            height: 180px;
+            background-color: #fff;
+            border-radius: 24px;
+            box-sizing: border-box;
+        }
+
+        .card-span {
+            grid-column: span 3;
+            height: auto;
+        }
+
+        .card-head {
+            height: 56px;
+            width: 100%;
+            margin-top: 40px;
+            padding: 0 30px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-span .card-head {
+            justify-content: unset;
+            height: auto;
+        }
+
+        .card-head-title {
+            font-family: "Noto Sans Gujarati";
+            font-optical-sizing: auto;
+            font-weight: 300;
+            font-style: normal;
+            font-variation-settings: "wdth" 100;
+            color: #060000;
+            font-size: 16px;
+            height: 44px;
+        }
+
+        .card-span .card-head-title {
+            width: 240px;
+            font-size: 18px;
+            height: auto;
+            font-weight: 400;
+        }
+
+        .card-span .card-head-sub-title {
+            font-family: "Noto Sans Gujarati";
+            font-optical-sizing: auto;
+            font-weight: 500;
+            font-style: normal;
+            font-variation-settings: "wdth" 100;
+            font-size: 18px;
+        }
+
+        .card-span .card-pool-content {
+            color: #060000;
+            margin-top: 20px;
+            padding: 0 30px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-span .card-pool-content:last-child {
+            margin-bottom: 40px;
+        }
+
+        .card-span .card-pool-content-title {
+            width: 240px;
+        }
+
+        .card-span .card-accepted-worker-title {
+            margin-left: 38%;
+        }
+
+        .card-span .card-pool-content-text {
+            font-family: "Noto Sans Gujarati";
+            font-optical-sizing: auto;
+            font-weight: 300;
+            font-style: normal;
+            font-variation-settings: "wdth" 100;
+            color: #060000;
+        }
+
+        .card-head-icon {
+            width: 56px;
+            height: 56px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .card-head-mode-icon {
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAAXNSR0IB2cksfwAAAv1QTFRF8/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T39MO0910n9L2r9aeN92Uy9NvV8/L0914p9otm8/T38+Pf9o9s9N/a9nFD918p8+7v8/P19bGb9Mq99NbN9pV08+zs9pBt8/T39MS19olk9a6X9ayT929A92Ar8+Le8/T38/T39ndL9NPJ9aCD9oxn9N3X8/T38/T39NzW9bqn9nlN8/T38/T38/Dy914o9ODb9n9W9Zt89M/E8/T38/T39NvU9pNy9L+u9Zl69Z+C9NXN8/T38/T39bKc9aSJ9aWK9bSf9bai9aiO9auT9Mu/9aiP9Zx+9aaL8+3t8/T39Zh49a+Y9oNc9ntR8/T39o1p8/L19MKy92Et9oVe9aWL9nJE92s69bup9Ma49ohj9Z6B8/T39nhN9Zx99NLJ92w89opl9ayU9NLI9nxS928/9Mm79aOI9pRz9nhM9n5V9pJw92Iu9Mi78/T39MzA9a2V9Mm88/T39M3B9Z6A9amQ9bik9odh8/T39pNx9Mu+92w79nBB8/T38/T39ZZ19nVI9oFZ9MOz9NTL8/T38/Hz9Zh59aqR9oZg92k39NPK8/T39Zd392k49MW39Zt992c19n1T9NHH8/T38/T39nlO9oFY92o59bCa9nRG92Qw8+vr8/T38+/w9Zl59pFu9a6W8/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T3LB/VKQAAAP90Uk5TAAQ3dJvD4vL/8eG/mXEzAgdRre6oSwUVhe3pfREMh/R+CdtICP6OHc/GKdkgKurjHxzEiVJB13cU7P///////////wb/////////////////rv////////+eA///////5Dj///8nc////////2Kc////////isL///////////////+z/////9H////////////////v///////////////////////g////wf//////sP////+IcP//////YP///////yL/////////mEz/////////O//////cAWwQ8Od/b/w6lYbIu9IPI9oZ0BjFuELYeOhu5Zdji7LN3cyvCfoi9wAABA1JREFUeJyVln9MU1cUx8+3EeuC2Rwy649UUapzOjAIxJLNmMCAzBEi0RjFEUMUpy7oIv4gAovgNg1R/IEMRxpFhxJm3DpNQdTEzRAyZE8cI3M060oCAiVUIRG3TKW7D4H23fta2vPPee/0+7nvnHtvz70gFcOojT0MqmmEyDTgH5ciEszYvolAHfBEZfwQoMsXqAccarnLQh3sXsE3hzReMNlmw6YOGnpf+MBG8hlwl+oG30aHb47Z/MfjlYyDS/7yleaYhaONAyNg9YOT83qgAKOG2/3i2BQNOTzA+doOPzlWU4vLDU6dYD4VtlQaB2PafEuVpp/WPArqHf5MqNsirQOvwLnCDp7AljWNgMYeb/vTm0V1dcrgzAH+h+XAr8zFAmxoI9DIC56/ZGDCH8L/6H08C75LtGIKcIfiMaBp5gSaoEGoTukHT0JuMZfkDK1nLvqtG7wgohmUVidwqx0zLcyl9My+TpSsBcy8Iq0a6T+4+Ghyf9hV5tbZF1xhbr3NUCMMvaESmdVCNL198SXmYoeDfpETfadKrIUysO2iENyM3+XaMluXnWNvWx5EmUQwC7sqxOgnOCu7Hfhadp/ijCjJxv7TQnA3a4clRDl4EdR3gfbLnfUrXpOHycI+zZen2VhWUMvcR0VbW5hLKeRFh6AVWnJ0KqjBuQZ4SZOurpkE82rtd3p+QTSYwnPFNStPkvw55nbcYzO/j7a2bNzLqY6LYMmltQfpRFUGsItKKzOBnVRuIolTBeM1fv1TH2Vtp28qpApksaWUTNhC58oEUIPqTC708cOkI+yL2YM1jXThdLa95RpdPCWAYbiSwYWqTuzZRJePE7ENV32MaN8GVnZOOqeqgdinog+sp9xbuSiRv5jbFrmWDpuFWf0edWlcyPh8+k0yH5Z+RCoduC0VWu7R9UOFKZzKgtf/40K1BQysy5eODOfRjTypHkkMPJrIqW4jvX6IB4sT2M6WVh1MZqlKX8bF0529GZ8pRec3gkKf8uAXH9JPOdLPDXlsH0h3XauosvTkSqWoIQYkvcdl0Zj9ORWdiTOVM1dmbNpZ3lN0FjFKjbSU3SxmPVYG75sclO9aXmvppYJT5+m3Ivq3v0kpacVCtsXnOClQazPIfdWGJQFyD+PtI0dAx+IAwfZ5r84OQ21kQFxYu2v0mAvXdAbAWaGnsYO1yxAAaJtD42DCtwv85uw5l90g6YK7/eQ6oCMPkPoS/bt2dCKUFCC967J5E3vYI4QQB5Luz1kTcr3O8LFHj64Ky27fq2KNe+q+Kyva8SBm+Erzmd7jTdnHE8yL1O7HsvVjqqKR8geAvls7rIK1ahLtyoh4mX9jUdzREEVE4/x78kJeJoKyZZXKZ9tca3c4YosjVAv/H7G9M2b18zHvAAAAAElFTkSuQmCC");
+        }
+
+        .card-head-status-icon {
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAAXNSR0IB2cksfwAAAtZQTFRF8/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38vP3y9Liu8XYydHh8fL28/T3tL/Vo7HMs7/V8fP2w83duMLYxc7e2d/q8/T38/T32d7qo7HLr7vS0tjlsb3U3eLrsLvS2eDp8/T38/T31tznwcrcxs7f0Nbm7/H11tzoq7fQydLh8/T38/T30djltcDV4ubuytLho7LLy9Pj8/T38/T36ezypLLMpbLNo7HN3OHr4OPt8/T38/T3u8TYw8zc7e/04OTt6+3zztXjq7jQ8/T37e/1p7XPo7LMy9Ph8/T32d/puMLWy9HiorLLsL3T8PH2yNDfpLLOytDf5urwp7XOydDgztbj8/T3ztTk2N7os77V0tnlpLHMvsjbzNTgo7DMx9Dg7O7ztsHWp7TO193o8/T33+PusLzT2+DqqbbPw8zd8/T38vP2pLLN3+Ps5Ojv4eXt8/T34OTs3ODrwMjc6Ovxxc3drbnS8/T38/T36uzyx9DfpbPNydLi4+bu8/T3pLPNw8zepLHNw87c5ejvvMba197o8/T35OjwqbbQ5OfvrLjRzNPjxc3etcDW19zoqLXOqbXPv8nc5+rw8/T38/T3v8jbzdXix8/f6uzz8/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T3+kJWHQAAAPJ0Uk5TAAQ3dJvD4vL/8eG/mXEzAgdRre6oSwUVhe3pfREMh/R+CdtICP6OHc/GKdkgKurjHxzEiVJB13cU7Ab//////67//////////54D///////////kOP//////////J3P///////9inP///////4rC/////////7P/////0f/////////////////v/////////////////+D//////8H//////7D///////+IcP//////YP////////8i////////////////mEz/////O9wBbBDw539v/DqVhsi70g8j2hnQGMW4Qth46G7ll2OLss3dzK8rknQtAAADWklEQVR4nJWWeUhUURTGzzeYlraaZBpqNqJilk3aZguVYWCZYUULWFRkRaK2ELSpaYsgVBRmK0UEZiuFJARZUFFmQ1KSacmIimXhhkuU2fSeOr737rvvOfP9dc835zfc7Z1zQRyhX7ZBGy9H5YwGflkVjpvA/hgM9ARaOP/vDtTrgT5AI2/uYqInLJrgmE6DBibKG9V8MOD7Xx2sdz6t0lIlMAg1+pwg/+aBlQyAIV/1pmmTEeUMOAVVdnDivMoUoOlfpV2csEWdjTLQ36XGTk5Y03urBA4fZD8VmmweACPK9VOV8hld2g/6NNqzoZKmVrX2gb6qGzyIwkp6wdnftO6nlkz1dSI4vtVBjqi7RwAjLbzvSF+GIW3gbWm4+NmX6JFTSkEL36jsObCVj+ca4KIixDyzsm6UiLSPtLYTjcJjLrjsHlYXqtzYJo9HcT/HAT1O38j7Lpdcg423VebaOvKtJb98olnGGn/c5IEJSLzBeptQFVQZXP+kN9haEeh0hQNuQ/Il1tve7SysMbc/SuoYcY4DJsOZvacppRSWJ4tTgbcvVeBeuLCVdV/z2BxZuB8vaAFOsqABQ1nrIHBMio48XYIniM5gs46qwRXuk9KkKKso5vBx4ACb5YZh7PlnA/ulKOcBxePe6j3qqebtZqwzhbEpsvAs8mlDEsvRRFzdxVjn0eK+QxZf/D00UcXRZajr1EynLcDDlZv7out4k8dmCLqBOwkq8yZyXbuSKrLEcf45Sl7HAQsw8o/KDHdJvbUeWEV0HzlxQSs5HD1ETEknaz7KPhBbKJwfkOnalb6Ux53eCfLoYN15aRnWzPTlxV1EmYjicVQcCXq9SGWv9zDTCeDCJtf5XIzoZYTwsvBq1vhVW68wXbjiE5ocBl+bxLpahlkOcm/jLL0t4OMMB8F3oX29I6BgrkPcxEprf5szGuoc4MwIIVtjrTA5AJYF0wAYeS3Mbu5D6mMJJE+3Bju5jwggGUjV8fY9Oz7BnxQghVqrtZJl+gw/YkDyLA0clPvSNM02lFVVFBzSPxVzdIf0VlaU43oY9abZFSKLlHU88m64Vl+3wEtRSNkG4NPg8o+DvTLEW5SO+jE/KtCU5adwDDW1hulsmhoUlXBK7OaTzQ1GLE4L5S78PxCL1ehaeAh1AAAAAElFTkSuQmCC");
+        }
+
+        .card-head-power-icon {
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAAXNSR0IB2cksfwAAAhBQTFRF8/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T39tlz9807980998w49s9F8/T38+/g98kp9eOl9thx9dyG8/T39O3T9tFN8/T38/T39tNb8/T38/T39OzP9Oe28/T38/T39tRf9d2L8/T38/T39OzQ9tBK8/Ls8/Hp8/Ho9O3W8/T38/T39tJT98w598sw9tRd8/T39OnC8/Dl8/T398os9eOk9OrH8/T39d2I9thz9tl19thv9OnE9Oi99eGd8/T39s5D9d6N8/T38/T39dp89tNZ8/T38/T38/Lv9s9G8/T28/T398w38/T398069O3X9Oa18/T38/T39tNX9d2K8/T39OvL9d+U8/T38/T39O7c8/Px8/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T3kaIquwAAALB0Uk5TAAQ3dJvD4vL/8eG/mXEzAgdRre6oSwUVhe3pfREMh/R+CdtICP6OHc/GKdkgKurjHxzEiVJB13cU7P//////Bv//////rv//ngP/5Dj//ydz//9inP///////4rC/////7P//9H////v/////////+D//8Gw//+IcP///2D/Iv///5hM//87///cAf//bBDw539v/DqVhsi70g8j2hnQGMW4Qth46G7ll2OLss3dzK80/rXiAAADBElEQVR4nJWXbUhTYRTHz7mpK+xFo1gvLDXNoNRYFBhFk0JiVBRYUCaRhGYxK7NmimhikiWJhkoiBQVBH8IIepHog71SWhRlHzRtomIZaQozIct173Xb3d09z7O7/4f7PHv+5zeet51zh0AI3fJ0xqgYzUgE4oRLNRIusj8CgUbEX8T3z0cc4IEmxCFq7lKgER1MMHJcYGCSlmAPDcZ9/8vB5PmMKktVwJXYy+dExYx4V+IFV3XzpulRLHb4gYnYpYOT5vVBBZqnOnVx4haND/mAMYZenZy4pvcuBZwdYD9VWv3OC67r4IeqZYpod4OmIT0bqiipa3QaXKa5wQG05o0MJn9j3U+WzAP9ErholOGvRWk+iG0aZ/KfCFq6qN+RqGT3GeMrjSWEjiF7SzdOyc2MF4SX2I6Q+pzmNk/KTdhTykxpQWuri3IAtkzIjes1ZW59gDue0FyqU27mPKbtbbi7hXas8l5HPqRd2I577pPGzp/Sc6GcI5sJPw0z7pDgXjmpmRzLoS/qNuHvxzDynqYrGc0UeosIyECDNiWDd0tFxTnvUgECzqSGD37xduNvUAFwiAYzpT35LPUSmkhOLAuzGOcP2Z/ER1IjwxXw5FWGdVRMZ+YGhgnRmF9PO9K+Ci9ZHNiQlady38L6K0wOTuDZGtLIG+zbgJfZ4Gmc+4c0jnzc1E0eoFt2tLaNU0bBM0slh8upQVjgJIzC1pQLHA6KShDKKwijGMt5HJQUiTdk8YhmvBTPcbkytItXfOmwxijHYi5YkS/l1Wos5EZpVVnrkEtAbUGQ4KXj07UjLqs0KC660+Uuc7FCfxBcFdrAU1jr84MAq4+BF7Tsy9PN1dx7pIBgDB/UydViNviA0FSn77WjDg+DCoQEVw8r2EcNmAl+IBgv5gTkGodPebo+WRXtzfxTqap0Ku/KqnR8E7N40/xt8/mkzuOWrDOMug7X8IAqkfoXANOgYYrAykLqHOoRbeWYFx+VlqkaEa5/DbH7h5ElB3alS/8acqsGVuB5axS58P9o67GX6LocqQAAAABJRU5ErkJggg==");
+        }
+
+        .card-head-realhash-icon {
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAAXNSR0IB2cksfwAAAo5QTFRF8/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T3msD7aaT9aaP9a6T9rMv68/T3gLH8QYz/UJX+Vpj+VZj+UZX+TZP+qMj68/T38/T3lb37Z6L98/T38/T3ytz55Ov4wtf5frD88/T38/T3udL65ez4gbH8zd75c6n9R4//8/T38/T3o8b7kbr7ttH6jbj8R5D/8/T38/T33ef4vtX5k7z78/T3f7D8X57+utP6zt75SpH/x9r5dav98/T3fq/8j7r7SJD/oMP70eD5iLb8gbL8vNT5y935ZaH9y9z5wdf58PL3aKP98/T3qsr6bqf91OL4TpP+U5f+w9j5qsn6mL/7xtn5dKr9tM/61eL4dqv9zN351uP48/T3Qo3/8/T3rcv6uNH67/L3ss768/T3rMr6kLr78/T38/T3Yp/+b6f95u345uz4Xp3+4en4q8r68/T36u/3V5n+bqb9jrn8dar98/T38vT3uNL6t9H6r8z6hbT84ur4ydz5RY7/Ro//p8j68/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T3N7vwhQAAANp0Uk5TAAQ3dJvD4vL/8eG/mXEzAgdRre6oSwUVhe3pfREMh/R+CdtICP6OHc/GKdkgKurjHxzEiVJB13cU7Ab//////67//////////54D///kOP////8nc////////2Kc//////+Kwv///7P/////////0f//////////////////7////////////////////+D/wf////+w//+IcP////////9g//////8i/////////////5hMO9wBbBDw539v/DqVhsi70g8j2hnQGMW4Qth46G7ll2OLss3dzK/lvZctAAADdElEQVR4nJWWe0hTURzHf79VW2b2MpgVC2tDoZeJRXmt8NXDWUaZRVYmGWliWaI9wYrCsndWRAUltN4vy0zLylE4NYseSLDVUFKsSZqCj8h03bvptnvO3ev7zzn3x/ez/c655/5+B0FA2Kf+SZuQh4qMQOwy8iKeLNvkDJQi/hb4/VGIDY5AGaJBKHfOKMVau+DIDpEdjNNY1AuDip//HGCmfFqtS7WC/ljnmGM1ocWyEgs46ZujNPslxxoCnIo6Fzgur488MLBX6xLHblGHwQacIKlzkWPX9MFoBYc62U+eJr+3gDNqHFv5ko2o7gNlBlc21KppulYzOJ46wU4UUGUCZ/+wdz7tKbChngN9Wt3kALp7WJCpFfqOHEs0qA0FtjQI+R8bYhVpmVqNEFpJBINN5aLH8jwAu8VqwhNWjMoyIxFkPF4SkchODRGZX4gxz8k0GC/sBM9im4iylQQhGlc8oUBvtjZJC2wiy/ABaYrFtfcocNxd3vNKdsU3SVM8Jl2nQLGaG9aq+v7OIMduClyPYuqcmsFEnT9eAUjCL5Mvb/pFpZqMEqokm8CUzwF/tNO595IHIACKcDAZMoGJuplnYBv2DPzqp1cczyqndnWHEDg3d9dr+TVuuhvVYWXgNbM3hzR5ogf5/oGJOJitvc3N9pUuqGAQi5W4l0715B7BNXLK9G46deipht1XKlPwxdO7KHDpTvPkaMFEVe4jDRx7uDyTNJ1Auk4xKzLMk+wXGjjwbKIKmLjtpOk0XkwnY3m3VpvG/FUF8WnnUbVuM5OQQpou4rC/ZOySJgS72HFIErNxA8CWs0GS+DTSdBWVVR1kEPLR4MN+v9/etqXiGtj8SawmHTkZCKPbKfDGOdOwpbdED1vzIH0V5bgTg1AYR4Wd695i9mYxpsVt7j4q2SM+rtlt8GEUV1dLcKmb3OPkWlMLKF3iJvgk0tw7FGdi3eJ8tca+NicX1bvBFWE49DfWsig3wJJQsIDM4YUuc8+PPLWCIPVsdJErxTlgA0J5qmvXjlcYDDwQphj19sw2UuMsIECQFs5zyr1pXtQ/tamqeOGE47dSlNBuvSvzyvE7DHGUZme4zRO/jjPnou319QoM5BVSsgHIGiW9Ath9UWotP0Jf5of7+WfN4kVEld9FStJGg5xi93PtJqKoUY7xWxWCC/8PmWvpYYz81/wAAAAASUVORK5CYII=");
+        }
+
+        .card-head-avghash-icon {
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAAXNSR0IB2cksfwAAAkNQTFRF8/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T3surPpejIsurQ8/T38/T3Xt2d8/T38/T3cOCoceCo8/T38/T36/PyxO3bw+3a0+/k8/T38/T32fDngeKy8/T33vHqlOW9cuCpc+Cq8/T3pujIl+bA8vT2lua/u+vV1O/k2/DprOnMsOrOZN6hY96gvuzX0O/iyO3d8vT32PDn1e/ll+a/5fLvat+ka9+l2vDo8/T3k+W9nufExO3az+7hwezZ4fHsj+W7pujJyu7e8/T3d+Gs7/P17vP0p+jJ8/T3huO18/T3h+O28/T38/T3iOO28PT1keW8qenLze7gceCp8/T36fLxdOCq3fHqfOKv5vLvuuvU6vPy8/T3tOrRjOS5nefDoOfFkuW8iuS3v+zY8/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T3R5EVsgAAAMF0Uk5TAAQ3dJvD4vL/8eG/mXEzAgdRre6oSwUVhe3pfREMh/R+CdtICP6OHc/GKdkgKurjHxzEiVJB13cU7AaungP////kOP8nc///Ypz/////isL//7P/////0f/////////////////////////////v////////////4P/////B/7D/iHD///////9g/////////yL/////////mEw73AFsEPDnf2/8OpWGyLvSDyPaGdAYxbhC2HjobuWXY4uyzd3MrzIMSWkAAAMSSURBVHicnZZrSBRRFMfPmSwrY1NbWDO2lJWkUkORLM0K0ShLlCgrNCgtkwgzCt2wwgdEjy+JUvgASTIpIiELiwgLs5ctCkmkKCtqq1u5regmlTrNrPuaubMzO/4/3f3P+Q3n3jl7zkUQENpkX4wLxRCOL+IUzXF8GPa7FKhC/CXwfn/EYTFQjWgUyp0NVKHeLehnodxgrAKxXxgMGZ0Wwaz5mJ1bdYKhOCDOMQo2OXbiANf3iaVplwa7eWA49nrAsXl1ccDI2R6POOaILEYXMNh7wEOO2VMn7QSXSZwnRxt0DjC6WzyUK7Vvhw1UGz05UKcies1z4GqigiW08YMV3Dzirj7dKXJ4iAUDzDI5gH8zDBirF/ofiYtaOI4yj9Sm8A6EON08wOg3GP+JFo/ZhPieMLe0YsJbiZfHAbST7lZMapMAt814vSbdHbi7VTA8gelsL0TAnZj6XBDcNQGKFhEwGRcJ1+keM/g9sa5STCsek89T0ZtoyWnW7m0AL/+mdLx/CAfXYAMBUriY8DIR6R+qPlAoF0wtxQnF13VYQwTlCIBWpX+DsKrczxBxO8Xk30w+98El5Pc/hTAS2AlRFXk6iC4XPhwKtTcJ8+xHiGGqJari/Du3YBBeukGYBe0Q0/VHHCxEgT6lbZMGL2DpFcIsegXtF1shoezyS0gs2T6dVEyCJaj4y/dK8RlEBrQwxaEbhb30U6YGtAR4DeO/WHjedRwDJfwESxAzh3tUoUYIyOdz+VcRlJNkIpIqP4lQnTcPsOIEc7NYaZLNVWI2U+KrxmSDt7LYvlqHuTK5qmK9dQTU58gEa47MzY4Q7WlZXFAPbRtzGmpIBleLGWAfrPeyZIB1h8EBxuYd9Zi7U9nmBEHlY/CQq8cD4ALCwzLPrh0NuA84IITR/e6CXdSIacADQVV9UJJ7MHbMvnTpqlh8V/yr1BZOOu/KnHbcjPvF0vyd4fKL28dji467m+uPMJnTSPkDQG3wnhXAKqkyPdchL/PL1yrPpHEcqmmQyuaHkSCrxAJ27mTWGjR4Ll0juPH/dvzVk/UmXSEAAAAASUVORK5CYII=");
+        }
+
+        .card-head-reject-icon {
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAAXNSR0IB2cksfwAAAmdQTFRF8/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38MvT7Z6t6neL6F116Wd+64yd7rbB8uHn8/T38MjR6W+E7Z2s8/L18/T38/T37Z+u64qc8MbQ8uDm8uru8ubr8dbd7qu46WV86nKH8d3j8/T38/T37Jmo6WqA8NLZ7I6f6F938uXq8/T38/T377vG8uzw8dLa6WyC6XGG8/T38/T38+/z8uTp8MnS8MzV7aOy7rO/8/T38/T37aWz8MvU78LM8/D06GF58uvv8/T38ujs78PN77zH8/T36Wl/8MTO78HL64eZ78DL8dPb7JCh8/T364aZ8MrT77/K8/T38M3V64uc8/T37rG97qy58/T38+/y6F527JGh7rK+8/T38/T38dTb7rC88/T37JWl6W+F8unu8/P28/T37I+g8/Dz8drh6Wh/6WuB8dvh8MXO7Zys8+3x8/T38/T36nWJ6GR77rXB8/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T38/T3YrUkeQAAAM10Uk5TAAQ3dJvD4vL/8eG/mXEzAgdRre6oSwUVhe3pfREMh/R+CdtICP6OHc/GKdkgKurjHxzEiVJB13cU7Ab//////////67/////ngP//////////////+Q4////////J3P//////2Kc////////isL///////+z////0f/////////v////4P//wf//sP////+IcP//YP////8i////////////mEz///873AFsEPDnf2/8OpWGyLvSDyPaGdAYxbhC2HjobuWXY4uyzd3Mrxoy9oMAAANZSURBVHiclZZ7SFNRHMfP70JZTMtCWRkLRS3KLC0xM9NKiUR89NBl2pRKhj0gKlLM3sYoTe0dVmSKNtQMNZZplCEFZaKQRJoySdEWaUqzqMx173b3uPec3W3ff+7vfs/vs/s7Z+f+zgVEELAyBuOkHMxxBfil4zgimv1qCxQDfCf8/lyAQSFQAqAh1c4kikFtFZwzQVnBGHlAHxn0+TIpgOnrGTNP1Qwuhn5hjpbXqGkmJnBpr1CZRnlDFw/0hx47OKauTg4YONVtF0cv0YTGAvRy6reTo+fUoTODzjbWkyO/dhMY1CWcypXEtY0FJRp7FtSs5T1jBnAhtoNtaMUbPRgybG1/WlPg4AADzhtzkEPo7z8aDFWT3iNhUdPGwdqSrmLf/tfEUf82QJGvCANh8JuNZsBLwvj6Rohu0eH+Ri1yYZ/4zR0e4wmx1ZBUj9vxwx7wiI23DkqgBk9JBFkVZkrV7i5KNk6GXuRbgYOpkFHO92Qf0ZL7bJz+AflBl/9dDNwLB2/zvT3vA0rYUN6BVt7KbA+C6/ykAzAd26cpn1ZfNXEhV+itNbXmMj/pEDhhLTl4bZGpzrBC+nqk1fk5P4mCGVj5weEFxudF5DPBsZYNF/hJ2SQwUsFccp6hdZeQNVAEM7H/31AqzTHzY3S8mVRqXh7f0y/Oiaf0erLGyUZ8cTxBcYbvnVbFnKI54/NQZrvkRxM/6SzgfepcQ9ykysyh83UJOfwcpIDibMyUqpFbRJbx7mINacvlw6w/uFtQJYXDhrCoQRvXSdjkxRD9dgK3gyiUonGr2waqmLI02Icn5OYCctPiPrrZ2kvj7+hoN8gJ4yUyQOUZhAG6dYhkJfLKlDvk1nEvmf6ymD9KHBNSKUjpLb5gxGGwLInpq9WQ6iBXcVStPwJqdzoIPthiODt88tId4jy7dewx500NOMApIR4ZD9b6JAfA6lhkAkNzttvNPbz2xAwisWjITq4WopEFiBqz7PvsqINNiAOiZbo+a8kWaoAoxAORuDLGJqcaSTSGFl0VCm8I/yvK/VrztzKnHb+AzUJl/oy3uOP28VDFDmvnehOEcxop/wCQDDlNEbBSKkvNdfCP+dmLAtKiOA7V/JmS8tNwkNGuTOYUT1AOeYM83Zc48f8qG95l1o542gAAAABJRU5ErkJggg==");
+        }
+
+        .card-content {
+            width: 100%;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+        }
+
+        .card-current-text {
+            font-size: 26px;
+        }
+
+        .card-sub-text {
+            font-size: 18px;
+            color: #a0a0a0;
+            margin-left: 16px;
+        }
+
+        .dashboard-right {
+            width: 25%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 20px;
+        }
+
+        .grid-item-1 {
+            grid-column: span 1;
+            grid-row: span 2;
+            height: 220px;
+        }
+
+        .grid-item-2 {
+            grid-column: span 1;
+            grid-row: span 1;
+            height: 140px;
+        }
+
+        .grid-item-3 {
+            grid-column: span 1;
+            grid-row: span 2;
+            height: 220px;
+        }
+
+        .grid-item-4 {
+            grid-column: span 1;
+            grid-row: span 1;
+            height: 140px;
+        }
+
+        .grid-item-5 {
+            grid-column: span 1;
+            grid-row: span 1;
+            height: 60px;
+        }
+
+        .card-sub-content {
+            width: 100%;
+            padding: 40px 0;
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            box-sizing: border-box;
+        }
+
+        .grid-item-1 .card-sub-content,
+        .grid-item-3 .card-sub-content {
+            margin-top: 40px;
+            padding-bottom: 30px;
+        }
+
+        .grid-item-2 .card-sub-content,
+        .grid-item-4 .card-sub-content {
+            padding-bottom: 20px;
+        }
+
+        .card-sub-content .card-current-text {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .card-sub-content .card-sub-text {
+            font-size: 14px;
+        }
+
+        .card-bottom-title {
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .card-button-title {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding-left: 20px;
+            padding-right: 40px;
+            box-sizing: border-box;
+            font-size: 16px;
+            color: #418cff;
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMQAAABGCAMAAACkAMuKAAAAAXNSR0IB2cksfwAAAelQTFRF////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////5ubmra2tf39/XV1dQUFBMDAwJiYmJSUl////5eXlkpKSRUVFICAg5OTk////////1tbWampqIiIi7Ozsc3NzISEh////tbW1Li4u////////+vr6fHx8e3t7////9fX1////////9vb2UlJS////WlpaW1tb////////////s7OzsrKy////6Ojob29v////////09PTZWVl////4uLik5OTjY2N////RERE////Nzc37e3tnp6e4eHh////rKys5+fnoaGhqKio////////fn5+0tLSmpqa////XFxc////Pz8/IyMj0dHRoKCg////LCwstLS0lJSUMTExNjY2UFBQYGBgoqKi1dXV+fn5eXl5ZmZmysrKwMDAz8/PpaWlxcXFzMzMKCgotra2Ojo6ycnJQEBAjIyM4+Pjenp6////////////////////cnJy////Q0NDLy8vJCQk////////////////////////////////////////CGLuuAAAAKN0Uk5TAAEsYIat0uXy/xJip+moEwJKsPoEX9hG2Ryqq1PvVAeTFMTF3v//////////Ff//////Bsj///////+U//8b8P///x3/tUf//0///wNYWf//Sf//D/f//6////8v/2P/////kP////+PtP///9H/5//////m//////////////////////////////////9I8V1cnP/a////xlWsYUxkqYf17ot+B4cAAATSSURBVHicY2TACRhhALcSuoD/MIBTBS4XcgEd/4c2jiITsDD+ZfmIXQqrJwSAPvhGSweRCbiA0fEBizgWT4gwMn6muXvIBbxvBd9gCGJ6QpwRR6QNEsD//yW6ELonJBnf08kx5AOhf89RBdA8IcOIGVmDD4gwPkLho3hCnhEjpgYpEP//EImH7AlFxufoigctkPp3H8FB8oTk38FbKGECXmZEiCM8Icn9dCAcgxvIQBsM/8DV9RN0aemvcF/APaH7elCVrKrozZ3//5mvoyrhF70MZcFUGjNepbnDiAc6jIy/MATZ/v+/giKg/f8shAHzhMIgKpf0GRm/Y5Xg/P//IjLf6CiEhnpC5i1NnUUSMGb8glOOBxb4ECAMySkQT9gxnqKhq0gC5ozYmngIIPjvJIJjxrIXREE8If2Odq4iDVg/4SSg4rvMUQTHZjeIBHvC7TDNHEUisCOizSD+/xCC47CdAeIJAbbBUsuZcxHTZpD6ikhRvGZbIJ7w3UMzV5EILPDnBxgQPI5gu24Ce4KRlZlGbiIVuD0irAYM5HfCmX9//wd5InAHbZxEMvB8jbtsRQU8otvhbI73IE/w/aaNm0gGXveIVqq0Dc5k/QT0RAjjFlq4iHTg+wR7PY0NcMpshjF9/q9hZOD+RxMnkQ78bpGgWG0TnMn0lZEhYiP13UMO0GTFbPPhBmxKG2BM/xWMPhcHSa868DphNUhAax2MZcbLGLOW6s4hD4RcIawGCfx4AGcGM8atprJjyAQyPLhk9BgZL2ARNlwOY4UyJi+jiZtIBtFnccn8tF4SexpT2GwRjBXPmLmAJm4iGSQexynFZjIv+SiGqOV8GCuBMXcObRxFKpDH1wRX3YzpC9vZMFYKY/4smriJZJB+EI+kA+P0rH1oYvYzYaxsRo6BnkOBghz8TWnXyXm7UEXcJ8JY/xkJdaToBTRQuR7rUbhBjE9XFm9FEfp9F84crJ7w6UGTL+1GU4LsiUGanCRNUbi73J8uqdiAIvQTPhj7f2hkbFCBWvn+AIoIcsYeEkUssGarWocmhFzEDoHKDtg6aq1Zgy6GXNkN/mYHKB5qMVt4yM2Owd8ADGNsRMvTYIDcABz8TfGIhsa1mP2lqDo4M5jR5/MgGYYlsVMUXQtjATtFg6Z72rKK/O7p8BgoGDRDNknnyR+yGRaDZ8NjGHPwDCi7PySsBgwwB5QZ/HbTxElkAEviVsfEViPY0KH9ITfJIvkNyyQLQ38VrVxFKiB/umt4TDwySJZX0spVpAJzv8V45WM3IU0Bt29GmgJmmFhBM1eRDPBOxltORuZ25oEpWA97chnNHEUy0I9ZhmNZRNQSlGURXbkQGuYJedHBtEClZCfWBSruqEMg2q+h9QpiqVBGCW0dRhpQZdRD7V+kzkRfKtQzA32p0CBctKVqxsYiy8PI8P/L4z+/Tt1Gl8a2aIuBwfnyYKnziAG8unvhbJSFjEzP6O8YMsGEDuwLGYfHklIgmNU8SKYh8QKz6DQUPvpIrPONQdMCwQkmrdiLKoA5nOzmP6jKWgzQ86sQXQjb1oOOqsFbTPF+5SRm6wEQCPSWDtJNIN3FRG4CAQP+/oL/g2w7zqT/haRsx4FKMTLOTWXM082gjaOIBVz9TZ4zZifj2xgFADrOWeiByLhgAAAAAElFTkSuQmCC");
+            background-repeat: no-repeat;
+            background-position: right;
+            background-size: contain;
+            border-radius: 38px;
+            cursor: pointer;
+        }
+
+        .footer {
+            flex-basis: 100%;
+            margin-top: 20px;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 30px;
+            font-weight: 300;
+        }
+
+        .footer-left,
+        .footer-middle {
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-left .mac {
+            margin-right: 40px;
+        }
+
+        .footer-middle {
+            width: 40%;
+        }
+
+        .footer-middle .ver,
+        .version {
+            margin-right: 40px;
+        }
+
+        .footer-middle .newverion a {
+            color: #418cff;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .footer button {
+            padding: 12px 22px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        .footer button:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 1512px) {
+            .footer-middle {
+                width: 56%;
+            }
+        }
+
+        @media (max-width: 1380px) {
+            .card-span .card-accepted-worker-title {
+                margin-left: 28%;
+            }
+
+            .card-span .card-head-title {
+                width: 180px;
+            }
+
+            .card-span .card-pool-content-title {
+                width: 180px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <div class="header-logo">
+                    <img src="" alt="">
+                </div>
+                <div class="header-name">Avalon Device</div>
+                <div class="header-separator"></div>
+                <div class="header-status"></div>
+                <div class="header-status-text">Normal</div>
+            </div>
+            <div class="header-right">
+                <div class="header-load-icon" onclick="updateDashboard()"></div>
+                <div class="header-load-text">Latest reloaded</div>
+                <div class="header-load-time">2024/08/21 23:55:55</div>
+                <div class="header-logout" onclick="logout()">
+                    <div class="header-logout-icon"></div>
+                    <div class="header-logout-text">Log Out</div>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-title">
+            <div class="dashboard-title-left">Dashboard</div>
+            <div class="dashboard-title-right">
+                <div class="elapsed">Elapsed</div>
+                <div class="elapsed-time">
+                    <div class="elapsed-cell">
+                        <div class="elapsed-days">88</div>
+                        Days
+                    </div>
+                    <div class="elapsed-cell">
+                        <div class="elapsed-hours">88</div>
+                        Hrs
+                    </div>
+                    <div class="elapsed-cell">
+                        <div class="elapsed-mins">56</div>
+                        Mins
+                    </div>
+                    <div class="elapsed-cell">
+                        <div class="elapsed-secs">56</div>
+                        Secs
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard">
+            <div class="dashboard-left">
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-head-title">Working<br />Mode</div>
+                        <div class="card-head-icon card-head-mode-icon"></div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-current-text card-current-mode-text">High</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-head-title">Working<br />Status</div>
+                        <div class="card-head-icon card-head-status-icon"></div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-current-text card-current-status-text">Init</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-head-title">Power</div>
+                        <div class="card-head-icon card-head-power-icon"></div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-current-text card-current-power-text">-</div>
+                        <div class="card-sub-text card-sub-power-text">W</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-head-title">Real-time<br>Hashrate</div>
+                        <div class="card-head-icon card-head-realhash-icon"></div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-current-text card-current-realhash-text">-</div>
+                        <div class="card-sub-text card-sub-realhash-text">TH/s</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-head-title">Average<br>Hashrate</div>
+                        <div class="card-head-icon card-head-avghash-icon"></div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-current-text card-current-avghash-text">-</div>
+                        <div class="card-sub-text card-sub-avghash-text">TH/s</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-head-title">Rejected<br>Percentage</div>
+                        <div class="card-head-icon card-head-reject-icon"></div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-current-text card-current-reject-text">-</div>
+                        <div class="card-sub-text card-sub-reject-text">%</div>
+                    </div>
+                </div>
+                <div class="card card-span">
+                    <div class="card-head">
+                        <div class="card-head-title">Current Pool</div>
+                        <div class="card-head-sub-title"># <span>-</span></div>
+                    </div>
+                    <div class="card-pool-content">
+                        <div class="card-pool-content-title">Address</div>
+                        <div class="card-pool-content-text card-pool-address-text">stratum+tcp://
+                        </div>
+                    </div>
+                    <div class="card-pool-content">
+                        <div class="card-pool-content-title">Worker</div>
+                        <div class="card-pool-content-text card-pool-worker-text">-</div>
+                        <div class="card-pool-content-title card-accepted-worker-title">Accepted</div>
+                        <div class="card-pool-content-text card-accepted-worker-text">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="dashboard-right">
+                <div class="card card-fan grid-item-1">
+                    <div class="card-sub-content">
+                        <div class="card-current-text card-current-fan-text">-</div>
+                        <div class="card-sub-text card-sub-fan-text">rpm</div>
+                    </div>
+                    <div class="card-bottom-title">Fan Status</div>
+                </div>
+                <div class="card card-asic grid-item-2">
+                    <div class="card-sub-content">
+                        <div class="card-current-text card-current-asic-text">Fine</div>
+                    </div>
+                    <div class="card-bottom-title">Asic Status</div>
+                </div>
+                <div class="card card-power grid-item-3">
+                    <div class="card-sub-content">
+                        <div class="card-current-text card-current-powerstatus-text">Fine</div>
+                    </div>
+                    <div class="card-bottom-title">Power Supply<br>Status</div>
+                </div>
+                <div class="card grid-item-4">
+                    <div class="card-sub-content">
+                        <div class="card-current-text card-current-ping-text">-</div>
+                        <div class="card-sub-text card-sub-ping-text">ms</div>
+                    </div>
+                    <div class="card-bottom-title">Ping to Pool</div>
+                </div>
+                <div class="card grid-item-5">
+                    <div class="card-button-title" onclick="goPoolConfig()">Pool Config</div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="footer-left">
+                    <div class="mac">Mac</div>
+                    <div class="macaddress">-</div>
+                </div>
+                <div class="footer-middle">
+                    <div class="ver">Firmware version</div>
+                    <div class="version">-</div>
+                    <!-- <div class="newverion" style="display: none;"><a>New Firmware Available !</a></div> -->
+                </div>
+                <div class="footer-right">
+                    <button class="reboot" onclick="reboot()">Reboot</button>
+                </div>
+            </div>
+        </div>
+        <form name="logoutform" action="logout.cgi" method="post" style="display: none;"></form>
+        <form name="rebootform" action="reboot.cgi" method="post" style="display: none;"></form>
+        <form name="poolform" action="poolconfig.cgi" method="post" style="display: none;"></form>
+    </div>
+
+</body>
+<script>
+    function $(element) {
+        return document.querySelector(element);
+    }
+    function getCurrentFormattedTime() {
+        const now = new Date();
+
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+
+        const hours = String(now.getHours()).padStart(2, '0');
+        const mins = String(now.getMinutes()).padStart(2, '0');
+        const secs = String(now.getSeconds()).padStart(2, '0');
+
+        return `${year}/${month}/${day} ${hours}:${mins}:${secs}`;
+    }
+    function convertTime(utime) {
+        const days = Math.floor(utime / (24 * 3600));
+        utime %= 24 * 3600;
+        const hours = Math.floor(utime / 3600);
+        utime %= 3600;
+        const mins = Math.floor(utime / 60);
+        const secs = utime % 60;
+        return { days, hours, mins, secs };
+    }
+    function AJAX(url, callback) {
+        var req = AJAX_init();
+        req.onreadystatechange = AJAX_processRequest;
+        function AJAX_init() {
+            if (window.XMLHttpRequest) {
+                return new XMLHttpRequest();
+            } else {
+                if (window.ActiveXObject) {
+                    return new ActiveXObject("Microsoft.XMLHTTP");
+                }
+            }
+        }
+        function AJAX_processRequest() {
+            if (req.readyState == 4) {
+                if (req.status == 200) {
+                    if (callback) {
+                        callback(req.responseText);
+                    }
+                }
+            }
+        }
+        this.doGet = function () {
+            req.open("GET", url, true);
+            req.send(null);
+        };
+        this.doPost = function (body) {
+            req.open("POST", url, true);
+            req.setRequestHeader(
+                "Content-Type",
+                "application/x-www-form-urlencoded"
+            );
+            req.setRequestHeader("ISAJAX", "yes");
+            req.send(body);
+        };
+    }
+
+    function ajaxRequest(url, success) {
+        const xhr = new XMLHttpRequest();
+
+        xhr.open("GET", url, true);
+
+        // 设置默认的Content-Type为application/json
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.setRequestHeader('Accept', '*/*');
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        success && success(response);
+                    } catch (e) {
+                        error && error({ message: 'Invalid JSON response', details: e });
+                    }
+                }
+            }
+        };
+
+        xhr.onerror = function () {
+            error && error({ message: 'Network Error' });
+        };
+
+        xhr.send(null);
+    }
+
+    function clearCookie(name) {
+        // 设置 Cookie 的过期时间为过去的日期即可清除
+        document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    }
+
+    let currentVersion = '';
+    function dashboardCallback(req) {
+        let device_name = req.hwtype;
+        if (device_name.indexOf("Nano3s") > 0) {
+            $('.header-name').innerHTML = "Avalon Nano 3S";
+        }
+
+        if (device_name.indexOf("Mini3") > 0) {
+            $('.header-name').innerHTML = "Avalon Mini 3";
+        }
+
+        let status = req.sys_status;
+        if (status == "1") {
+            $(".header-status").style.backgroundColor = "#26e68e";
+            $(".header-status-text").innerHTML = "Normal";
+        } else {
+            $(".header-status").style.backgroundColor = "#a1aabd";
+            $(".header-status-text").innerHTML = "Idle";
+        }
+
+        let elapsed = req.elapsed;
+        elapsed_obj = convertTime(elapsed);
+        $(".elapsed-days").innerHTML = elapsed_obj.days;
+        $(".elapsed-hours").innerHTML = elapsed_obj.hours;
+        $(".elapsed-mins").innerHTML = elapsed_obj.mins;
+        $(".elapsed-secs").innerHTML = elapsed_obj.secs;
+
+        let workingmode = req.workingmode;
+        if (workingmode == "0") {
+            $(".card-current-mode-text").innerHTML = "Low";
+        } else if (workingmode == "1") {
+            $(".card-current-mode-text").innerHTML = "Mid";
+        } else if (workingmode == "2") {
+            $(".card-current-mode-text").innerHTML = "High";
+        }
+
+        let workingstatus = req.workingstatus;
+        if (workingstatus == "0") {
+            $(".card-current-status-text").innerHTML = "Init";
+        } else if (workingstatus == "1") {
+            $(".card-current-status-text").innerHTML = "Fine";
+        } else if (workingstatus == "2") {
+            $(".card-current-status-text").innerHTML = "Idle";
+        } else if (workingstatus == "3") {
+            $(".card-current-status-text").innerHTML = "Fault";
+        }
+
+        let power = req.power;
+        $(".card-current-power-text").innerHTML = power;
+
+        let realtime_hash = req.realtime_hash;
+        $(".card-current-realhash-text").innerHTML = realtime_hash;
+
+        let average_hash = req.average_hash;
+        $(".card-current-avghash-text").innerHTML = average_hash;
+
+        let rejected_percentage = req.rejected_percentage;
+        $(".card-current-reject-text").innerHTML = rejected_percentage;
+
+        let fanr = req.fanr;
+        let fan_status = req.fan_status;
+        if (parseInt(fan_status) > 0) {
+            $(".card-current-fan-text").innerHTML = fan_status;
+            $(".card-sub-fan-text").style.display = "block";
+            $(".card-fan").style.backgroundColor = "#fff";
+            $(".card-fan").style.color = "#000";
+        } else {
+            if (fanr == "0") {
+                $(".card-current-fan-text").innerHTML = fan_status;
+                $(".card-sub-fan-text").style.display = "block";
+                $(".card-fan").style.backgroundColor = "#fff";
+                $(".card-fan").style.color = "#000";
+            } else {
+                $(".card-current-fan-text").innerHTML = "Error";
+                $(".card-sub-fan-text").style.display = "none";
+                $(".card-fan").style.backgroundColor = "#ec5770";
+                $(".card-fan").style.color = "#fff";
+            }
+        }
+
+        let asic_status = req.asic_status;
+        if (asic_status == "0") {
+            $(".card-current-asic-text").innerHTML = "Fine";
+            $(".card-asic").style.backgroundColor = "#fff";
+            $(".card-asic").style.color = "#000";
+        } else {
+            $(".card-current-asic-text").innerHTML = "Error";
+            $(".card-asic").style.backgroundColor = "#ec5770";
+            $(".card-asic").style.color = "#fff";
+        }
+
+        let ping = req.ping;
+        $(".card-current-ping-text").innerHTML = ping;
+
+        let power_status = req.power_status;
+        if (power_status == "0") {
+            $(".card-current-powerstatus-text").innerHTML = "Fine";
+            $(".card-power").style.backgroundColor = "#fff";
+            $(".card-power").style.color = "#000";
+        } else {
+            $(".card-current-powerstatus-text").innerHTML = "Error";
+            $(".card-power").style.backgroundColor = "#ec5770";
+            $(".card-power").style.color = "#fff";
+        }
+
+        let current_pool = req.current_pool;
+        let pool_status = req.pool_status == "0" ? "Inactive" : "Active";
+        let pool_status_color = req.pool_status == "0" ? "#DC362E" : "#000000";
+        $(".card-head-sub-title span").innerHTML = current_pool + `<span style="margin-left: 100px; color:${pool_status_color}">${pool_status}</span>`;
+
+        let address = req.address;
+        $(".card-pool-address-text").innerHTML = address;
+
+        let worker = req.worker;
+        $(".card-pool-worker-text").innerHTML = worker;
+
+        let accepted = req.accepted;
+        $(".card-accepted-worker-text").innerHTML = accepted;
+
+        let mac = req.mac;
+        $(".macaddress").innerHTML = mac;
+
+        let version = req.version;
+        currentVersion = version.split("_")[0];
+        $(".version").innerHTML = version;
+    }
+    function logout() {
+        alert("Are you sure you want to sign out?");
+        clearCookie("auth");
+        logoutform.submit();
+    }
+    function reboot() {
+        alert("Are you sure you want to restart?");
+        rebootform.submit();
+    }
+    function goPoolConfig() {
+        poolform.submit();
+    }
+    function updateDashboard(isTimeout) {
+        let oUpdate;
+        oUpdate = new AJAX("get_dashboard.cgi?num=" + Math.random(),
+            function (t) {
+                try {
+                    eval(t)
+                } catch (e) {
+                    console.log("updateDashboard err:" + e.message)
+                }
+            });
+        oUpdate.doGet();
+        let loadtime = getCurrentFormattedTime();
+        $(".header-load-time").innerHTML = loadtime;
+        if (isTimeout)
+            setTimeout(function () { updateDashboard(true) }, 15000)
+    }
+    updateDashboard(true);
+    // let obj = {
+    //     hwtype: "Avalon Mini 4",
+    //     sys_status: "0",
+    //     elapsed: "2999",
+    //     workingmode: "0",
+    //     workingstatus: "0",
+    //     power: "300",
+    //     realtime_hash: "4.00",
+    //     average_hash: "3.00",
+    //     rejected_percentage: "1.00",
+    //     fan_status: "1000",
+    //     asic_status: "1",
+    //     ping: "100",
+    //     power_status: "1",
+    //     current_pool: "1",
+    //     address: "stratum+tcp://10.100.106.101:4444",
+    //     worker: "avalondefault",
+    //     mac: "e0:e1:e2:e3:e4:e5",
+    //     version: "24100800_88155e2t"
+    // }
+    // dashboardCallback(obj);
+</script>
+
+</html>

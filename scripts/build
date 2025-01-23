@@ -1,0 +1,112 @@
+#!/usr/bin/env bash
+
+set -e
+
+SRC_DIR=$(cd `dirname $0`/..; pwd)
+RESOURCE_DIR="${SRC_DIR}/resource"
+BUILDIMG_DIR="${SRC_DIR}/output"
+PRODUCT="Nano3s"
+
+echo && echo "[INFO] Source path: $SRC_DIR"
+COMMIT=`git describe --match=NeVeRmAtCh --always --abbrev=7 --dirty=t`
+
+prepare_toolchain(){
+    TOOLCHAIN="Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.6.0"
+    TOOLCHAIN_TAR=${TOOLCHAIN}.tar.bz2
+    DOWNLOAD_URL="https://kendryte-download.canaan-creative.com/k230/"
+    TOOLCHAIN_URL=${DOWNLOAD_URL}/toolchain/${TOOLCHAIN_TAR}
+
+    if [ ! -d ${SRC_DIR}/toolchain ]; then
+        mkdir -p ${SRC_DIR}/toolchain
+    fi
+
+    ### download toolchain
+    if [ ! -d ${SRC_DIR}/toolchain/$TOOLCHAIN/bin ]; then
+        echo "download toolchain and extract ..."
+        [ -e ${SRC_DIR}/toolchain/${TOOLCHAIN_TAR} ] && rm  ${SRC_DIR}/toolchain/${TOOLCHAIN_TAR}
+        wget -q --show-progress -P ${SRC_DIR}/toolchain ${TOOLCHAIN_URL};
+        tar jxf ${SRC_DIR}/toolchain/${TOOLCHAIN_TAR} -C ${SRC_DIR}/toolchain
+    fi
+
+    if [ ! -e ${SRC_DIR}/toolchain/$TOOLCHAIN/bin/riscv64-unknown-linux-gnu-gcc ];then
+        echo "toolchain not exist, please retry!"
+        exit 1
+    fi
+
+    export PATH=${SRC_DIR}/toolchain/${TOOLCHAIN}/bin:$PATH
+}
+
+prepare_resource(){
+    rm -fr ${BUILDIMG_DIR}; mkdir -p ${BUILDIMG_DIR}/
+    find ${RESOURCE_DIR}/ -type f -name "*.tar.gz" -exec tar xzf {} -C ${BUILDIMG_DIR} \;
+}
+
+cgminer_compile(){
+    ### build cgminer
+    BUILD_DIR="$SRC_DIR"/cg_miner/build
+    echo "[INFO] build is $BUILD_DIR"
+    if [ -d "$BUILD_DIR" ]; then
+        echo  "[INFO] $BUILD_DIR will be cleared "
+        rm -rf "$BUILD_DIR/"*
+    fi
+
+    if [ -d "$BUILD_DIR" ]; then
+        echo "[INFO] Build dir: $BUILD_DIR"
+    else
+        mkdir -p "$BUILD_DIR"
+    fi
+    echo && echo "[INFO] --------------------start cg_miner compile ------------------------"
+    cd $BUILD_DIR
+    cmake .. -DAVALON_CPU=$AVALON_CPU -DFW_VERSION=$FW_VERSION -DRELEASE_LVL=$RELEASE_LVL && make -j`nproc` || exit 1
+}
+
+## model select
+MODEL_LIST=("NANO3S")
+echo && echo "[INFO] Please select Model [n]"
+for ((i=0; i<"${#MODEL_LIST[@]}"; i++)); do
+    echo "($i) ${MODEL_LIST[$i]}"
+done
+read -p "
+Your Choice [0]: " input
+[ "$input" == "" ] && input=0
+[[ $input =~ ^[+-]?[0-9]+$ ]] || (echo "[ABORT] Model select" && exit -1)
+if [ "$input" -ge "0" -a "$input" -lt "${#MODEL_LIST[@]}" ]; then
+    AVALON_MODEL="${MODEL_LIST[$input]}"
+    echo "[INFO] Model: $AVALON_MODEL"
+else
+    echo "[ABORT] Model select ($input)!!!"
+    exit -1
+fi
+
+## cpu 
+AVALON_CPU="k230"
+echo && echo "[INFO] CPU: $AVALON_CPU"
+
+## Input version num
+echo && read -p "[INFO] Please input version num [nn]: " input
+if [ "$input" == "" ]; then
+    input="nn"
+elif [ "${#input}" -eq 1 ]; then
+    input="0"$input
+elif [ "${#input}" -ge 2 ]; then
+    input=${input:0:2}
+fi
+FW_VERSION="$input"
+echo && echo "[INFO] CGminer Version $FW_VERSION"
+
+## release level:  0 - debug; 1 - release
+RLELEASE_STR=("debug" "release")
+RELEASE_LVL="0"
+echo && echo "[INFO] CGminer release level $RELEASE_LVL"
+echo
+
+prepare_toolchain
+prepare_resource
+cgminer_compile
+
+cp ${SRC_DIR}/cg_miner/build/cg_miner "${BUILDIMG_DIR}/app/release/linux/app"
+${SRC_DIR}/scripts/sdkbuild ${PRODUCT} ${FW_VERSION} ${COMMIT}
+
+echo
+echo "Build ${PRODUCT} Success !"
+echo
